@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://twitter.github.io/typeahead.js/css/examples.css"
+    />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="remote">
+      <input
+        class="typeahead"
+        type="text"
+        placeholder="Oscar winners for Best Picture"
+      />
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"
+      integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/typeahead.bundle.min.js"
+      integrity="sha512-E4rXB8fOORHVM/jZYNCX2rIY+FOvmTsWJ7OKZOG9x/0RmMAGyyzBqZG0OGKMpTyyuXVVoJsKKWYwbm7OU2klxA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+
+    <script>
+      var bestPictures = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace("value"),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch:
+          "https://twitter.github.io/typeahead.js/data/films/post_1960.json",
+        remote: {
+          url: "https://twitter.github.io/typeahead.js/data/films/queries/%QUERY.json",
+          wildcard: "%QUERY",
+        },
+      });
+
+      $("#remote .typeahead").typeahead(null, {
+        name: "best-pictures",
+        display: "value",
+        source: bestPictures,
+      });
+    </script>
+  </body>
+</html>
