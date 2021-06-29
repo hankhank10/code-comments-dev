@@ -16,7 +16,6 @@ class User(UserMixin, db.Model):
     snapshots = db.relationship('Snapshot', backref='owner', lazy=True)
     comments = db.relationship('Comment', backref='author', lazy=True)
 
-
     def __repr__(self):
         return self.id
 
