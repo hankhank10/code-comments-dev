@@ -9,6 +9,8 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100))
     username = db.Column(db.String(100))
 
+    is_superuser = db.Column(db.Boolean)
+
     # setup strings
     verified = db.Column(db.Boolean)
     unique_setup_key = db.Column(db.String(30))
