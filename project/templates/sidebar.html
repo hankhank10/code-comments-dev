@@ -1,0 +1,26 @@
+<!-- Sidebar start -->
+<div class="sidebar">
+    <div class="sidebar-menu">
+    <!-- Sidebar links and titles -->
+      <h5 class="sidebar-title">{{snapshot.unique_reference}}</h5>
+      <div class="sidebar-divider"></div>
+
+        {% for row in snapshot.gists %}
+        {% if row.filename == gist.filename %}
+            <a href="{{ url_for('main_blueprint.show_snapshot', snapshot_unique_reference=snapshot.unique_reference, filename=row.filename) }}" class="sidebar-link active"><i class="far fa-file-code"></i> {{row.filename}}</a>
+        {% else %}
+            <a href="{{ url_for('main_blueprint.show_snapshot', snapshot_unique_reference=snapshot.unique_reference, filename=row.filename) }}" class="sidebar-link"><i class="far fa-file-code"></i> {{row.filename}}</a>
+        {% endif %}
+        {% endfor %}
+
+        {% if gist %}
+            <a href="new-script" class="sidebar-link"><i class="fas fa-plus"></i> Add new script</a>
+        {% else %}
+            <a href="new-script" class="sidebar-link active"><i class="fas fa-plus"></i> Add new script</a>
+        {% endif %}
+
+      <br />
+
+    </div>
+</div>
+<!-- Sidebar end -->

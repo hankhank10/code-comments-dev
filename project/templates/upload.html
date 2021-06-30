@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<!-- Uppy -->
+<link href="https://releases.transloadit.com/uppy/v1.29.1/uppy.min.css" rel="stylesheet">
+{% endblock%}
+
+{% block modals %}
+<!-- Modals go here -->
+<div class="modal" id="modal-pastebin" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <a href="#" class="close" role="button" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </a>
+      <h5 class="modal-title">Upload from Pastebin</h5>
+      <form action="..." method="post">
+        <div class="form-group">
+          <label for="pastbin-url" class="required">Pastebin URL</label>
+          <input type="text" id="pastbin-url" class="form-control" placeholder="https://pastebin.com/" required="required">
+        </div>
+        <input class="btn btn-primary btn-block" type="submit" value="Load Script from URL">
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-upload-file" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <h5 class="modal-title">Upload file</h5>
+
+      <div id="drag-drop-area"></div>
+
+    </div>
+  </div>
+</div>
+{% endblock%}
+
+{% block content %}
+<!-- Content wrapper start -->
+<div class="content-wrapper">
+  <!--
+    Add your page's main content here
+    Examples:
+    1. https://www.gethalfmoon.com/docs/content-and-cards/#building-a-page
+    2. https://www.gethalfmoon.com/docs/grid-system/#building-a-dashboard
+  -->
+  <div class="w-full h-full d-flex align-items-center justify-content-center">
+    <div class="content">
+      <h1 class="content-title">Start a new script</h1>
+      <div>
+        <a href="#" onclick="halfmoon.toggleModal('modal-upload-file')" class="btn btn-link px-0"><i class="fas fa-upload"></i> Upload file</a>
+      </div>
+      <div>
+        <a href="#modal-pastebin" class="btn btn-link px-0"><i class="fas fa-copy"></i> Copy from Pastebin</a>
+      </div>
+      <div>
+        <a href="" class="btn btn-link px-0"><i class="fab fa-github"></i> Copy from Github</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Content wrapper end -->
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://releases.transloadit.com/uppy/v1.29.1/uppy.min.js"></script>
+
+<script>
+  const DragDrop = Uppy.DropTarget;
+  const XHRUpload = Uppy.XHRUpload;
+
+  var snapshot_unique_reference = '{{ snapshot.unique_reference|join }}';
+
+  if (snapshot_unique_reference) {
+    post_url = '/load/file/'+snapshot_unique_reference
+  } else {
+    post_url = '/load/file/'
+  }
+
+  var uppy = Uppy.Core({
+    autoProceed: true,
+    restrictions: {
+      maxNumberOfFiles: 1,
+      minNumberOfFiles: 1
+    }
+  })
+  .use(Uppy.Dashboard, {
+    inline: true,
+    target: '#drag-drop-area',
+    height: 400,
+    maxHeight: 400
+  })
+  uppy.use(Uppy.XHRUpload, {
+    endpoint: post_url,
+    formData: true,
+    fieldName: 'file'
+  })
+
+  uppy.on('upload-success', (file, response) => {
+    //console.log (response);
+    uppy.reset()
+    halfmoon.toggleModal('modal-upload-file');
+    halfmoon.initStickyAlert({
+      content: "File <u>" + response.body.gist_filename + "</u> successfully uploaded to " + response.body.snapshot_unique_reference +".",
+      title: "File uploaded",
+      alertType: "alert-success",
+      fillType: "filled-lm"
+    });
+    window.location.href = "/" + response.body.snapshot_unique_reference + "/" + response.body.gist_filename;
+  })
+</script>
+{% endblock %}
