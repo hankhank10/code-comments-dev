@@ -57,6 +57,8 @@ class Gist(db.Model):
     downloaded = db.Column(db.Boolean, default=True)
 
     lines = db.relationship('Line', backref='gist', lazy=True)
+    comments = db.relationship('Comment', backref='gist', lazy=True)
+
 
     def __repr__(self):
         return self.id
@@ -77,5 +79,6 @@ class Line(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     line_id = db.Column(db.ForeignKey('line.id'), nullable = False)
+    gist_id = db.Column(db.ForeignKey('gist.id'), nullable = False)
     #owner_id = db.Column(db.ForeignKey('user.id'), nullable = False)
     content = db.Column(db.String(1000))

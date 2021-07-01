@@ -57,6 +57,9 @@ app.register_blueprint(loader_blueprint)
 from .gists import gists as gists_blueprint
 app.register_blueprint(gists_blueprint)
 
+from .comments import comments as comments_blueprint
+app.register_blueprint(comments_blueprint)
+
 #
 # Flask admin
 
