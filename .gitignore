@@ -3,3 +3,4 @@
 /migrations
 /uploads
 *.sqlite
+/project/codecomments.sqlite
