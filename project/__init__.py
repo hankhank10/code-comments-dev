@@ -53,6 +53,10 @@ app.register_blueprint(main_blueprint)
 
 from .loader import loader as loader_blueprint
 app.register_blueprint(loader_blueprint)
+
+from .gists import gists as gists_blueprint
+app.register_blueprint(gists_blueprint)
+
 #
 # Flask admin
 

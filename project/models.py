@@ -45,7 +45,13 @@ class Snapshot(db.Model):
 
 class Gist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     snapshot_id = db.Column(db.ForeignKey('snapshot.id'), nullable = False)
+
+    def snapshot_unique_reference(self):
+        snapshot = Snapshot.query.filter_by(id = self.snapshot_id).first()
+        return snapshot.unique_reference
+
     filename = db.Column(db.String(50))
     url = db.Column(db.String(300))
     downloaded = db.Column(db.Boolean, default=True)

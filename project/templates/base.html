@@ -26,7 +26,7 @@
     {% endblock %}
 
     <!-- Page wrapper start -->
-    <div class="page-wrapper with-navbar with-sidebar with-navbar-fixed-bottom" data-sidebar-type="overlayed-sm-and-down">
+    <div id="page-wrapper" class="page-wrapper with-navbar with-sidebar with-navbar-fixed-bottom" data-sidebar-type="overlayed-sm-and-down">
 
       <!-- Sticky alerts (toasts), empty container -->
       <!-- Reference: https://www.gethalfmoon.com/docs/sticky-alerts-toasts -->
@@ -42,16 +42,34 @@
       {% block content %}
       {% endblock %}
 
-      <!-- Navbar fixed bottom start -->
-      <nav class="navbar navbar-fixed-bottom">
-        <!-- Reference: https://www.gethalfmoon.com/docs/navbar#navbar-fixed-bottom -->
-      </nav>
-      <!-- Navbar fixed bottom end -->
+      {% block footer %}
+      {% endblock %}
     </div>
     <!-- Page wrapper end -->
 
     <!-- Halfmoon JS -->
     <script src="/static/halfmoon/js/halfmoon.min.js"></script>
+
+    <script>
+      function toastPrimaryAlert(flash_category, flash_content) {
+          halfmoon.initStickyAlert({
+              content: flash_content,
+              alertType: "alert-" + flash_category,
+              hasDismissButton: false,
+              timeShown: 10000
+          });
+      }
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+            let category = '{{ category }}';
+            let content = '{{ message }}';
+            toastPrimaryAlert(category, content)
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    </script>
 
     {% block javascripts %}
     {% endblock %}

@@ -1,0 +1,18 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+
+        <script>
+            let category = {{ category|join }}
+            let content = {{ message|join }}
+
+            toastPrimaryAlert(category, content)
+        </script>
+
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+

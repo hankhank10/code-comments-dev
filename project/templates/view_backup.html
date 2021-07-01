@@ -3,8 +3,6 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/a11y-light.min.css" integrity="sha512-WDk6RzwygsN9KecRHAfm9HTN87LQjqdygDmkHSJxVkVI7ErCZ8ZWxP6T8RvBujY1n2/E4Ac+bn2ChXnp5rnnHA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-
 <style>
     .fakecode {
         display: block;
@@ -14,24 +12,9 @@
     .make_red {
         color: red;
     }
-    .CodeMirror,
-    .CodeMirror-scroll {
-        max-height: 150px;
-        min-height: 150px;
+    .plus {
+        color: grey;
     }
-    .invisible-temp {
-        opacity: 0;
-    }
-    .invisible-permanent {
-        opacity: 0;
-    }
-    .faded {
-        opacity: 0.2;
-    }
-    .not-faded {
-        opacity: 1;
-    }
-
 </style>
 
 {% endblock%}
@@ -49,7 +32,7 @@
       </p>
       <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
         <a href="#" class="btn mr-5" role="button">Close</a>
-        <a href="{{ url_for('gists_blueprint.delete', snapshot_unique_reference = snapshot.unique_reference, filename = gist.filename) }}" class="btn btn-danger" role="button">Yes, delete</a>
+        <a href="{{ url_for('loader_blueprint.delete_gist', snapshot_unique_reference = snapshot.unique_reference, filename = gist.filename) }}" class="btn btn-danger" role="button">Yes, delete</a>
       </div>
     </div>
   </div>
@@ -62,7 +45,7 @@
         <span aria-hidden="true">&times;</span>
       </a>
       <h5 class="modal-title">Rename this script</h5>
-      <form action="{{ url_for('gists_blueprint.rename', snapshot_unique_reference = snapshot.unique_reference, filename = gist.filename ) }}" method="POST">
+      <form action="{{ url_for('loader_blueprint.rename_gist', snapshot_unique_reference = snapshot.unique_reference, filename = gist.filename ) }}" method="POST">
         <div class="form-group">
           <label for="new_filename" class="required">New name</label>
           <input type="text" id="new_filename" name="new_filename" class="form-control" value="{{ gist.filename }}" required="required">
@@ -80,7 +63,7 @@
 <div class="content-wrapper">
   <div class="container-fluid">
       <div class="row row-eq-spacing-lg">
-          <div class="col-lg-12">
+          <div class="col-lg-9">
               <div class="content pb-20">
                 <div class="position-relative">
                   <div class="position-absolute left-0">
@@ -100,51 +83,31 @@
 
               <div class="container-fluid">
                   <div class="row">
-
-<div class="col-1">
-<div class="right"><pre class="fakecode">{% for line in lines %}<span class="new_comment_clicker" id="new_comment_clicker_{{line.id}}">X</span> {{line.line_number}}
-{% endfor %}</pre>
-</div>
-</div>
-
-<div class="col-11">
-<pre><code>{% for line in lines %}{{line.content}}
-{% endfor %}</code></pre>
-</div>
-
-
-
+                      <div class="col-1"><pre class="fakecode">1 <i class="far fa-plus-square plus"></i>
+<span id="tester">2</span>
+3</pre></div><div class="col-11"><pre><code>from secrets import secrets
+from flask import flask
+for item in items:</code></pre></div>
+              </div>
+          </div>
+          </div>
+          <div class="col-lg-3 d-none d-lg-block">
+              <div class="content">
+                  <h2 class="content-title font-size-20">
+                      Comments
+                  </h2>
+                  <div class="fake-content"></div>
+                  <div class="fake-content"></div>
+                  <div class="fake-content"></div>
+                  <div class="fake-content"></div>
+                  <div class="fake-content"></div>
               </div>
           </div>
       </div>
   </div>
 </div>
-<div class="h-200"></div>
-</div>
 <!-- Content wrapper end -->
 
-{% endblock %}
-
-{% block footer %}
-    <!-- Navbar fixed bottom start -->
-        <nav id="comment_bar" class="navbar navbar-fixed-bottom">
-
-            <div id="container_comment_input" class="w-full h-full p-10">
-                    <div class="row">
-                        <div class="col-11">
-                            <textarea id="comment_input" class="form-control form-control-lg w-full p-10 h-full" placeholder="Enter your comment here"></textarea>
-                        </div>
-                        <div class="col-1 p-5 right">
-                            <div class="btn-group right" role="group" aria-label="Basic example">
-                              <button id="save_comment" class="btn btn-primary" type="button"><i class="fas fa-save"></i></button>
-                              <button id="delete_comment" class="btn btn-danger" type="button"><i class="fas fa-times-circle"></i></button>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-
-        </nav>
-        <!-- Navbar fixed bottom end -->
 {% endblock %}
 
 {% block javascripts %}
@@ -153,10 +116,14 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
 <script>
     hljs.highlightAll();
+
+    $('#gistname').click(function() {
+        $('#tester').addClass('make_red');
+    })
+
 </script>
 
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-
 <script src="/static/js/comments.js"></script>
+
 
 {% endblock %}

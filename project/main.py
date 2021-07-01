@@ -2,14 +2,12 @@ from flask import Flask, Blueprint, render_template, current_app, redirect, json
 from flask_login import login_required, current_user
 from . import db
 from . import app
-from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
 
 main = Blueprint('main_blueprint', __name__)
 
-from .models import Snapshot, Gist
+from .models import Snapshot, Gist, Line
 
-
+@main.route('/')
 @main.route('/new-script')
 def new():
 
@@ -33,6 +31,8 @@ def show_snapshot(snapshot_unique_reference, filename = None):
     else:
         gist = Gist.query.filter_by(snapshot_id = snapshot.id, filename = filename).first()
 
-    return render_template('view.html', snapshot = snapshot, gist = gist)
+    lines = Line.query.filter_by(gist_id = gist.id).all()
+
+    return render_template('view.html', snapshot = snapshot, gist = gist, lines = lines)
 
 
