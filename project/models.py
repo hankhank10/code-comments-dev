@@ -59,7 +59,6 @@ class Gist(db.Model):
     lines = db.relationship('Line', backref='gist', lazy=True)
     comments = db.relationship('Comment', backref='gist', lazy=True)
 
-
     def __repr__(self):
         return self.id
 
@@ -82,3 +81,6 @@ class Comment(db.Model):
     gist_id = db.Column(db.ForeignKey('gist.id'), nullable = False)
     #owner_id = db.Column(db.ForeignKey('user.id'), nullable = False)
     content = db.Column(db.String(1000))
+
+    def __repr__(self):
+        return self.id

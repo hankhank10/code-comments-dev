@@ -7,6 +7,7 @@ main = Blueprint('main_blueprint', __name__)
 
 from .models import Snapshot, Gist, Line
 
+
 @main.route('/')
 @main.route('/new-script')
 def new():
@@ -26,7 +27,7 @@ def show_snapshot(snapshot_unique_reference, filename = None):
     if len(snapshot.gists) == 0:
         return render_template('upload.html', snapshot=snapshot, gist=None)
 
-    if filename == None:
+    if filename is None:
         gist = Gist.query.filter_by(snapshot_id = snapshot.id).first()
     else:
         gist = Gist.query.filter_by(snapshot_id = snapshot.id, filename = filename).first()

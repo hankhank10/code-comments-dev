@@ -9,7 +9,6 @@ import coolname
 from .models import Snapshot, Gist, Line
 
 
-
 def get_id(snapshot_unique_reference):
     snapshot = Snapshot.query.filter_by(unique_reference = snapshot_unique_reference).first()
     return snapshot.id

@@ -2,12 +2,10 @@ from flask import Flask, Blueprint, render_template, current_app, redirect, json
 from flask_login import login_required, current_user
 from . import db
 from . import app
-from datetime import datetime
 
 gists = Blueprint('gists_blueprint', __name__)
 
 from . import snapshots
-
 from .models import Snapshot, Gist, Line
 
 
@@ -115,7 +113,7 @@ def rename(snapshot_unique_reference, filename):
     gist.filename = new_filename
     db.session.commit()
 
-    flash("Script renamed "+ new_filename, "success")
+    flash("Script renamed " + new_filename, "success")
 
     return redirect(url_for('main_blueprint.show_snapshot',
                             snapshot_unique_reference = snapshot_unique_reference,

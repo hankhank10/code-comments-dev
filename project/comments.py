@@ -2,11 +2,8 @@ from flask import Flask, Blueprint, render_template, current_app, redirect, json
 from flask_login import login_required, current_user
 from . import db
 from . import app
-from datetime import datetime
 
 comments = Blueprint('comments_blueprint', __name__)
-
-from . import snapshots
 
 from .models import Snapshot, Gist, Line, Comment
 
@@ -51,7 +48,7 @@ def api_comment():
     # GET
     if request.method == "GET":
         comment_id = request.args.get('comment_id')
-        if comment_id == None: return jsonify(status = "failed", reason = "no comment_id provided"), 404
+        if comment_id is None: return jsonify(status ="failed", reason ="no comment_id provided"), 404
 
         comment_content = get_content(comment_id)
         if comment_content == "## error ##":
@@ -65,15 +62,15 @@ def api_comment():
     # POST
     if request.method == "POST":
 
-        print (request.json)
+        print(request.json)
 
         request_data = request.json
 
         line_id = request_data['line_id']
         comment_content = request_data['comment_content']
 
-        if line_id == None: return jsonify(status = "failed", reason = "no line_id provided"), 404
-        if comment_content == None: return jsonify(status = "failed", reason = "no comment_content provided"), 404
+        if line_id is None: return jsonify(status ="failed", reason ="no line_id provided"), 404
+        if comment_content is None: return jsonify(status ="failed", reason ="no comment_content provided"), 404
 
         new_comment_id = create(line_id, comment_content)
         return jsonify(
@@ -88,8 +85,8 @@ def api_comment():
         comment_id = request_data['comment_id']
         comment_content = request_data['comment_content']
 
-        if comment_id == None: return jsonify(status = "failed", reason = "no comment_id provided"), 404
-        if comment_content == None: return jsonify(status = "failed", reason = "no comment_content provided"), 404
+        if comment_id is None: return jsonify(status ="failed", reason ="no comment_id provided"), 404
+        if comment_content is None: return jsonify(status ="failed", reason ="no comment_content provided"), 404
 
         edit(comment_id, comment_content)
         return jsonify(
@@ -103,7 +100,7 @@ def api_comment():
 
         comment_id = request_data['comment_id']
 
-        if comment_id == None: return jsonify(status = "failed", reason = "no comment_id provided"), 404
+        if comment_id is None: return jsonify(status ="failed", reason ="no comment_id provided"), 404
 
         delete(comment_id)
 

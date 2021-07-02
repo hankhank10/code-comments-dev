@@ -6,8 +6,6 @@ from . import app
 import secrets
 import os
 
-from datetime import datetime
-
 from . import gists
 from . import pastebin_api
 
@@ -52,13 +50,11 @@ def file_upload(snapshot_unique_reference = None):
 @loader.route('/load/pastebin/<snapshot_unique_reference>', methods=['POST'])
 def load_from_pastebin(snapshot_unique_reference = None):
 
-    print (request.form.get('pastebin_url'))
     pastebin_url = request.form.get('pastebin_url')
-
     content, pastebin_unique_reference = pastebin_api.download_content(pastebin_url)
 
     if content == "error":
-        flash ("danger", "URL not available")
+        flash("danger", "URL not available")
         return redirect(url_for('main_blueprint.show_snapshot',
                                 snapshot_unique_reference=snapshot_unique_reference))
 
