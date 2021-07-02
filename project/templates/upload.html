@@ -14,10 +14,10 @@
         <span aria-hidden="true">&times;</span>
       </a>
       <h5 class="modal-title">Upload from Pastebin</h5>
-      <form action="..." method="post">
+      <form action="/load/pastebin/{{ snapshot.unique_reference }}" method="post">
         <div class="form-group">
-          <label for="pastbin-url" class="required">Pastebin URL</label>
-          <input type="text" id="pastbin-url" class="form-control" placeholder="https://pastebin.com/" required="required">
+          <label for="pastebin_url" class="required">Pastebin URL</label>
+          <input type="text" name="pastebin_url" id="pastebin_url" class="form-control" placeholder="https://pastebin.com/" required="required">
         </div>
         <input class="btn btn-primary btn-block" type="submit" value="Load Script from URL">
       </form>

@@ -14,9 +14,10 @@ def download_content(url):
 
     # Step 2: Download content
     r = requests.get(url)
-    if r.status_code != 200: return "error"
+    if r.status_code != 200:
+        return "error", "error"
 
-    # Step 3: Split into lines
-    content = r.text.splitlines()
+    # Deliver content
+    content = r.text
 
-    return content
+    return content, unique_reference
