@@ -51,7 +51,7 @@ def file_upload(snapshot_unique_reference = None):
 def load_from_pastebin(snapshot_unique_reference = None):
 
     pastebin_url = request.form.get('pastebin_url')
-    content, pastebin_unique_reference = pastebin_api.download_content(pastebin_url)
+    content, pastebin_unique_reference = pastebin_api.get_from_bin(pastebin_url)
 
     if content == "error":
         flash("danger", "URL not available")
