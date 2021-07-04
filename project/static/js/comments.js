@@ -23,16 +23,8 @@ function initial_setup() {
             '|',
             'preview',
             'guide',
-            '|',
-            {
-                name: "custom",
-                action: function customFunction(editor){
-                    window.alert("Hi!")
-                },
-                className: "fas fa-save make_red",
-                title: "Custom Button",
-            }
-        ]
+        ],
+        status: false
     });
 
     $('#create_comment').hide()
