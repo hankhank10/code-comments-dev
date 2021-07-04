@@ -138,7 +138,7 @@
                               <button class="btn" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false">
                                 {{ snapshot.display_name }} <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
                               </button>
-                              <div class="dropdown-menu" aria-labelledby="...">
+                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="...">
                               {% if snapshot.owner_id == None %}
                                 <a href="#modal-claim-ownership" class="dropdown-item"><i class="fas fa-cart-plus"></i> Claim ownership</a>
                               {% endif %}
@@ -155,7 +155,7 @@
                               <button class="btn" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false">
                                 {{gist.filename}} <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
                               </button>
-                              <div class="dropdown-menu" aria-labelledby="...">
+                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="...">
                                 {% if snapshot.restricted == false or snapshot.owner_id == current_user.id %}
                                     <a href="#modal-rename" class="dropdown-item"><i class="far fa-edit"></i> Rename</a>
                                     <a href="#modal-delete-gist" class="dropdown-item"><i class="far fa-trash-alt"></i> Delete</a>
