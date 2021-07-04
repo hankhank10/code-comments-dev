@@ -7,6 +7,7 @@ def get_from_bin(url):
     source = None
     if "pastebin.com/" in url: source = "pastebin"
     if "hastebin.com/" in url: source = "hastebin"
+    if "github" in url: source = "github"
     if source is None:
         return "error", "error"
 
@@ -24,6 +25,14 @@ def get_from_bin(url):
         else:
             unique_reference = url.split("hastebin.com/", 1)[1]
         url = "https://hastebin.com/raw/" + unique_reference
+
+    if source == "github":
+        unique_reference = url.rsplit("/", 1)[1]
+
+        if "raw" not in url:
+            gist_path = url.split("github.com/", 1)[1]
+            url = "https://raw.githubusercontent.com/" + gist_path
+            url = url.replace("/blob", "")
 
     # Step 3: Download content
     r = requests.get(url)

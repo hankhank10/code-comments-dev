@@ -33,7 +33,7 @@ def fix_name(snapshot_unique_reference, filename):
     return filename
 
 
-def create_gist(filename, content, snapshot_unique_reference = None):
+def create_gist(filename, content, snapshot_unique_reference = None, url = None):
 
     # Check if new snapshot needs to be created
     if snapshot_unique_reference is None:
@@ -51,7 +51,8 @@ def create_gist(filename, content, snapshot_unique_reference = None):
     new_gist = Gist(
         snapshot_id = snapshot.id,
         filename = filename,
-        downloaded = True
+        downloaded = True,
+        url = url
     )
     db.session.add(new_gist)
     db.session.commit()

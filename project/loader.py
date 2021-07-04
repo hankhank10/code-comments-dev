@@ -61,7 +61,8 @@ def load_from_pastebin(snapshot_unique_reference = None):
     snapshot_unique_reference, filename = gists.create_gist(
         filename=pastebin_unique_reference,
         content=content,
-        snapshot_unique_reference=snapshot_unique_reference)
+        snapshot_unique_reference=snapshot_unique_reference,
+        url = request.form.get('pastebin_url'))
 
     return redirect(url_for('main_blueprint.show_snapshot',
                     snapshot_unique_reference=snapshot_unique_reference,

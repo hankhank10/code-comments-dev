@@ -218,7 +218,7 @@ $('#save_comment').click(
     }
 )
 
-$('#delete_comment').click(
+$('#delete_comment_confirm').click(
     function() {
         delete_comment(current_comment_id);
     }

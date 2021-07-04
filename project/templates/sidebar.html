@@ -7,16 +7,16 @@
 
         {% for row in snapshot.gists %}
         {% if row.filename == gist.filename %}
-            <a href="{{ url_for('main_blueprint.show_snapshot', snapshot_unique_reference=snapshot.unique_reference, filename=row.filename) }}" class="sidebar-link active"><i class="far fa-file-code"></i> {{row.filename}}</a>
+            <a href="{{ url_for('main_blueprint.show_snapshot', snapshot_unique_reference=snapshot.unique_reference, filename=row.filename) }}" class="sidebar-link active sidebar-link-with-icon"><span class="sidebar-icon"><i class="fa fa-code"></i></span> {{row.filename}}</a>
         {% else %}
-            <a href="{{ url_for('main_blueprint.show_snapshot', snapshot_unique_reference=snapshot.unique_reference, filename=row.filename) }}" class="sidebar-link"><i class="far fa-file-code"></i> {{row.filename}}</a>
+            <a href="{{ url_for('main_blueprint.show_snapshot', snapshot_unique_reference=snapshot.unique_reference, filename=row.filename) }}" class="sidebar-link sidebar-link-with-icon"><span class="sidebar-icon"><i class="fa fa-code"></i></span> {{row.filename}}</a>
         {% endif %}
         {% endfor %}
 
         {% if gist %}
-            <a href="new-script" class="sidebar-link"><i class="fas fa-plus"></i> Add new script</a>
+        <a href="new-script" class="sidebar-link sidebar-link-with-icon"><span class="sidebar-icon"><i class="fas fa-plus"></i></span> Add new script</a>
         {% else %}
-            <a href="new-script" class="sidebar-link active"><i class="fas fa-plus"></i> Add new script</a>
+        <a href="new-script" class="sidebar-link active sidebar-link-with-icon"><span class="sidebar-icon"><i class="fas fa-plus"></i></span> Add new script</a>
         {% endif %}
 
       <br />
@@ -24,3 +24,10 @@
     </div>
 </div>
 <!-- Sidebar end -->
+
+<a href="#" class="sidebar-link sidebar-link-with-icon">
+                    <span class="sidebar-icon">
+                        <i class="fa fa-terminal" aria-hidden="true"></i>
+                    </span>
+                    CLI commands
+                </a>
