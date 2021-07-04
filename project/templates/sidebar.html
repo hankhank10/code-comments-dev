@@ -7,7 +7,7 @@
         <div class="sidebar-divider"></div>
         <a href="{{ url_for('auth_blueprint.profile') }}" class="sidebar-link sidebar-link-with-icon"><span class="sidebar-icon"><i class="lni lni-home"></i></span> My comment sets</a>
         {% endif %}
-        <a href="{{ url_for('main_blueprint.new') }}" class="sidebar-link sidebar-link-with-icon"><span class="sidebar-icon"><i class="lni lni-label-new"></i></span> Create new comment set</a>
+        <a href="{{ url_for('main_blueprint.new') }}" class="sidebar-link sidebar-link-with-icon"><span class="sidebar-icon"><i class="lni lni-star-filled"></i></span> Create new comment set</a>
         <br>
       <h5 class="sidebar-title">
           {% if snapshot.unique_reference %}
