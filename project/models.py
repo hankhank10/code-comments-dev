@@ -1,13 +1,14 @@
 from . import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from flask_login import UserMixin
+from datetime import datetime
 
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), unique=True)
+    email = db.Column(db.String(100))
     password = db.Column(db.String(100))
-    username = db.Column(db.String(100))
+    username = db.Column(db.String(100), unique=True)
 
     is_superuser = db.Column(db.Boolean)
 
@@ -26,6 +27,7 @@ class Snapshot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     unique_reference = db.Column(db.String(100))
+    nickname = db.Column(db.String(100))
     secret_key = db.Column(db.String(25))
 
     #github specific stuff
@@ -36,8 +38,31 @@ class Snapshot(db.Model):
     owner_id = db.Column(db.ForeignKey('user.id'))
 
     date_snapped = db.Column(db.DateTime)
+    date_last_comment = db.Column(db.DateTime)
+
+    @property
+    def date_snapped_timestamp(self):
+        return datetime.timestamp(self.date_snapped)
+
+    @property
+    def display_name(self):
+        if self.nickname == None:
+            return self.unique_reference
+        else:
+            return self.nickname
+
 
     gists = db.relationship('Gist', backref='snapshot', lazy=True)
+
+    @property
+    def gist_count(self):
+        gist_count = Gist.query.filter_by(snapshot_id = self.id).count()
+        return gist_count
+
+    @property
+    def comment_count(self):
+        comment_count = Comment.query.filter_by(owner_id = self.id).count()
+        return comment_count
 
     def __repr__(self):
         return self.unique_reference()
@@ -55,6 +80,8 @@ class Gist(db.Model):
     filename = db.Column(db.String(50))
     url = db.Column(db.String(300))
     downloaded = db.Column(db.Boolean, default=True)
+
+    file_type = db.Column(db.String(20))
 
     lines = db.relationship('Line', backref='gist', lazy=True)
     comments = db.relationship('Comment', backref='gist', lazy=True)
@@ -79,8 +106,14 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     line_id = db.Column(db.ForeignKey('line.id'), nullable = False)
     gist_id = db.Column(db.ForeignKey('gist.id'), nullable = False)
-    #owner_id = db.Column(db.ForeignKey('user.id'), nullable = False)
     content = db.Column(db.String(1000))
+
+    @property
+    def owner_id(self):
+        gist = Gist.query.filter_by(id = self.gist_id).first()
+        snapshot = Snapshot.query.filter_by(id = gist.snapshot_id).first()
+        owner_id = snapshot.owner_id
+        return owner_id
 
     def __repr__(self):
         return self.id

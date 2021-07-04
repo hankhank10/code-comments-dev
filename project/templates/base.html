@@ -9,12 +9,17 @@
 
     <!-- Favicon and title -->
     <link rel="icon" href="path/to/fav.png">
-    <title>Starter template - Halfmoon</title>
+    <title>Code Comments</title>
 
     <!-- Halfmoon CSS -->
     <link href="/static/halfmoon/css/halfmoon-variables.min.css" rel="stylesheet" />
 
     <script src="https://kit.fontawesome.com/99043d701d.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://pro-cdn.lineicons.com/3.0/regular/lineicons.css">
+    <link rel="stylesheet" href="https://pro-cdn.lineicons.com/3.0/light/lineicons.css">
+    <link href="https://cdn.lineicons.com/3.0/lineicons.css" rel="stylesheet">
+
 
     {% block stylesheets %}
     {% endblock %}
@@ -24,6 +29,8 @@
 
     {% block modals %}
     {% endblock %}
+
+    {% include 'register.html' %}
 
     <!-- Page wrapper start -->
     <div id="page-wrapper" class="page-wrapper with-navbar with-sidebar with-navbar-fixed-bottom" data-sidebar-type="overlayed-sm-and-down">
@@ -50,6 +57,8 @@
     <!-- Halfmoon JS -->
     <script src="/static/halfmoon/js/halfmoon.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
       function toastPrimaryAlert(flash_category, flash_content) {
           halfmoon.initStickyAlert({
@@ -75,6 +84,7 @@
     {% endblock %}
 
     <script src="/static/js/ui.js"></script>
+    <script src="/static/js/validate.js"></script>
 
   </body>
 </html>

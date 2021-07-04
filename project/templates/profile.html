@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+{% endblock%}
+
+{% block modals %}
+<div class="modal" id="modal-add-change-email" tabindex="-1" role="dialog" data-overlay-dismissal-disabled="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <a href="#" class="btn close" role="button" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </a>
+      <h5 class="modal-title">Add or change your email address</h5>
+      <form action="/profile/change_email" method="post">
+        <div class="form-group">
+          <label for="email" class="required">Email address</label>
+          <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email here" value="{{ current_user.email }}" required="required">
+        </div>
+
+        <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+          <a href="#" class="btn mr-5" role="button">Cancel</a>
+          <input class="btn btn-primary" type="submit" value="Change" type="button"></input>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-change-password" tabindex="-1" role="dialog" data-overlay-dismissal-disabled="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <a href="#" class="btn close" role="button" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </a>
+      <h5 class="modal-title">Change your password</h5>
+      <form action="/profile/change_password" method="post">
+        <div class="form-group">
+          <label for="current_password" class="required">Current password</label>
+          <input type="password" name="current_password" id="current_password" class="form-control" placeholder="Current password" required="required">
+        </div>
+        <div class="form-group">
+          <label for="current_password" class="required">New password:</label>
+          <input type="password" name="new_password_1" id="new_password_1" class="form-control new_password_item" placeholder="New password" required="required">
+        </div>
+        <div class="form-group">
+          <label for="new_password_2" class="required">Confirm new password:</label>
+          <input type="password" name="new_password_2" id="new_password_2" class="form-control new_password_item" placeholder="New password" required="required">
+          <div id="matching_password_label" class="invalid-feedback">
+            Does not match with the password above.
+          </div>
+        </div>
+
+        <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+          <a href="#" class="btn mr-5" role="button">Cancel</a>
+          <input id="change_password_submit" class="btn btn-primary" type="submit" value="Change" type="button"></input>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock%}
+
+{% block content %}
+<!-- Content wrapper start -->
+<div class="content-wrapper">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-8">
+
+        <div class="card">
+          <h2 class="card-title">
+            <i class="lni lni-pencil-alt"></i> Your comment sets
+          </h2>
+          <table class="table" id="comment_table">
+            <thead>
+              <tr>
+                <th>Date created</th>
+                <th>Comment set name</th>
+                <th>Comment set unique reference</th>
+                <th class="text-right">Scripts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in user_snapshots|reverse %}
+              <tr>
+                <td><span data-livestamp="{{ row.date_snapped_timestamp }}"></span></td>
+                {% if row.nickname %}
+                <td>{{ row.nickname }}</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
+                <td><a href="{{ url_for('main_blueprint.show_snapshot', snapshot_unique_reference = row.unique_reference) }}">{{ row.unique_reference }}</a></td>
+                <td class="text-right">{{ row.gist_count }}</td>
+              </tr>
+            {% endfor %}
+            <tr>
+              <td><a href="{{ url_for('main_blueprint.new') }}"><i class="lnil lnil-label-new"></i> Create new</a></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="col-4">
+
+        <div class="card">
+          <h2 class="card-title">
+            <i class="lni lni-user"></i> Your profile
+          </h2>
+          <table class="table">
+            <tbody>
+              <tr>
+                <td>Username</td>
+                <td>{{current_user.username}}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                {% if current_user.email %}
+                <td><a href="#modal-add-change-email">{{current_user.email}}</a></td>
+                {% else %}
+                <td><a href="#modal-add-change-email">Add email</a></td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td>Password</td>
+                <td><a href="#modal-change-password">Change</a></td>
+              </tr>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- Content wrapper end -->
+{% endblock %}
+
+{% block javascripts %}
+<script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+  $('#matching_password_label').hide()
+  $('#change_password_submit').prop('disabled', true)
+
+  $('.new_password_item').blur( function() {
+    if ($('#new_password_1').val() != "" && $('#new_password_2').val() != "") {
+
+      if ($('#new_password_1').val() == $('#new_password_2').val()) {
+        $('#matching_password_label').hide()
+        $('.new_password_item').removeClass('is-invalid')
+        $('#change_password_submit').prop('disabled', false)
+      } else {
+        $('#matching_password_label').show()
+        $('.new_password_item').addClass('is-invalid')
+        $('#change_password_submit').prop('disabled', true)
+      }
+
+    }
+  })
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js" integrity="sha512-C3RIeaJCWeK5MLPSSrVssDBvSwamZW7Ugygc4r21guVqkeroy9wRBDaugQssAQ+m3HZsMWVvEigcNMr7juGXKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% endblock %}

@@ -62,8 +62,6 @@ def api_comment():
     # POST
     if request.method == "POST":
 
-        print(request.json)
-
         request_data = request.json
 
         line_id = request_data['line_id']

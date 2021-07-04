@@ -12,7 +12,50 @@
           <i class="fas fa-unlock"></i>
           <span class="sr-only">Lock</span>
       </button>
-      <a href="#" class="btn btn-primary" role="button">Login</a>
+
+      {% if current_user.is_authenticated %}
+        <div class="dropdown with-arrow">
+          <button class="btn" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false">
+              <i class="far fa-user"></i>&nbsp&nbsp {{ current_user.username }} <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="...">
+            <a href="{{ url_for('auth_blueprint.profile') }}" class="dropdown-item"><i class="lni lni-user"></i> View my profile</a>
+            <a href="{{ url_for('auth_blueprint.profile') }}#modal-change-password" class="dropdown-item"><i class="lni lni-lock-alt"></i> Change my password</a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ url_for('auth_blueprint.logout') }}" class="dropdown-item"><i class="lni lni-exit"></i> Log out</a>
+          </div>
+        </div>
+      {% else %}
+      <div class="dropdown">
+          <button class="btn btn-primary" data-toggle="dropdown" type="button" id="sign-in-dropdown-toggle-btn" aria-haspopup="true" aria-expanded="false">
+            Login <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
+          </button>
+          <div class="dropdown-menu w-250 w-sm-350 dropdown-menu-right" aria-labelledby="sign-in-dropdown-toggle-btn"> <!-- w-250 = width: 25rem (250px), w-sm-350 = width: 35rem (350px) only on devices where width > 576px -->
+            <div class="dropdown-content p-20"> <!-- p-20 = padding: 2rem (20px) -->
+              <form action="/login" method="post">
+                <div class="form-group">
+                  <label for="login_username" class="required">Username</label>
+                  <input type="text" name="login_username" class="form-control" placeholder="Username" required="required">
+                </div>
+                <div class="form-group">
+                  <label for="login_password" class="required">Password</label>
+                  <input type="password" name="login_password" class="form-control" placeholder="Password" required="required">
+                </div>
+                <input class="btn btn-primary btn-block" type="submit" value="Sign in">
+                <div class="text-right mt-10"> <!-- text-right = text-align: right, margin-top: 1rem (10px) -->
+                  <a href="#" class="hyperlink">Forgot password?</a> <!-- hyperlink = used on regular links to remove anti-aliasing in dark mode -->
+                </div>
+              </form>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#modal-register" class="dropdown-item text-center">Don't have an account? Sign up</a> <!-- text-center = text-align: center -->
+          </div>
+      </div>
+
+      &nbsp
+      <a href="#modal-register" class="btn btn-primary" role="button">Sign up</a>
+      {% endif %}
+
   </div>
 </nav>
 <!-- Navbar end -->

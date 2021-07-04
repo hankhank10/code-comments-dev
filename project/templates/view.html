@@ -76,7 +76,7 @@
   </div>
 </div>
 
-<div class="modal" id="modal-rename" tabindex="-1" role="dialog">
+<div class="modal" id="modal-rename" tabindex="-1" role="dialog" data-overlay-dismissal-disabled="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <a href="#" class="btn close" role="button" aria-label="Close">
@@ -87,6 +87,31 @@
         <div class="form-group">
           <label for="new_filename" class="required">New name</label>
           <input type="text" id="new_filename" name="new_filename" class="form-control" value="{{ gist.filename }}" required="required">
+        </div>
+        <input class="btn btn-primary btn-block" type="submit" value="Rename">
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-give-snapshot-nickname" tabindex="-1" role="dialog" data-overlay-dismissal-disabled="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <a href="#" class="btn close" role="button" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </a>
+      <h5 class="modal-title">Give this comment set a name</h5>
+      <p>
+        You can give this comment set a name. This will not change the URL or the unique reference.
+      </p>
+      <form action="{{ url_for('snapshots_blueprint.give_nickname', snapshot_unique_reference = snapshot.unique_reference ) }}" method="POST">
+        <div class="form-group">
+          <label for="new_snapshot_name" class="required">Name</label>
+            {% if snapshot.nickname %}
+                <input type="text" id="new_snapshot_name" name="new_snapshot_name" class="form-control" value="{{ snapshot.nickname }}" placeholder="A name for this comment set">
+            {% else %}
+                <input type="text" id="new_snapshot_name" name="new_snapshot_name" class="form-control" placeholder="A name for this comment set">
+            {% endif %}
         </div>
         <input class="btn btn-primary btn-block" type="submit" value="Rename">
       </form>
@@ -105,7 +130,30 @@
               <div class="content pb-20">
                 <div class="position-relative">
                   <div class="position-absolute left-0">
-                    <h1 id="gistname" class="content-title">{{gist.filename}}</h1>
+                          <div class="dropdown">
+                              <button class="btn" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false">
+                                {{ snapshot.display_name }} <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="...">
+                              {% if snapshot.nickname %}
+                              <a href="#modal-give-snapshot-nickname" class="dropdown-item"><i class="far fa-edit"></i> Change name</a>
+                              {% else %}
+                              <a href="#modal-give-snapshot-nickname" class="dropdown-item"><i class="far fa-edit"></i> Give name</a>
+                              {% endif %}
+                              </div>
+                          </div> /
+                          <div class="dropdown">
+                              <button class="btn" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false">
+                                {{gist.filename}} <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="...">
+                                <a href="#modal-rename" class="dropdown-item"><i class="far fa-edit"></i> Rename</a>
+                                <a href="#modal-delete-gist" class="dropdown-item"><i class="far fa-trash-alt"></i> Delete</a>
+                                {% if gist.url %}
+                                    <a href="{{ gist.url }}" target="_blank" class="dropdown-item"><i class="fab fa-sourcetree"> View source</i></a>
+                                {% endif %}
+                              </div>
+                          </div>
                   </div>
                   <div class="position-absolute right-0">
                     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with sets of button groups">
@@ -176,7 +224,6 @@
 {% endblock %}
 
 {% block javascripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
 <script>
@@ -186,5 +233,8 @@
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
 <script src="/static/js/comments.js"></script>
+
+
+
 
 {% endblock %}

@@ -47,12 +47,20 @@ def create_gist(filename, content, snapshot_unique_reference = None, url = None)
     # Check if gist with that filename already exists
     filename = fix_name(snapshot_unique_reference, filename)
 
+    # See if we can work out the file types
+    file_type = "code"
+    if ".py" in filename: file_type = "python"
+    if ".html" in filename: file_type = "html5"
+    if ".css" in filename: file_type = "css3"
+    if ".js" in filename: file_type = "javascript"
+
     # Create gist
     new_gist = Gist(
         snapshot_id = snapshot.id,
         filename = filename,
         downloaded = True,
-        url = url
+        url = url,
+        file_type = file_type
     )
     db.session.add(new_gist)
     db.session.commit()

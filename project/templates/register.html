@@ -1,0 +1,44 @@
+<div class="modal" id="modal-register" tabindex="-1" role="dialog" data-overlay-dismissal-disabled="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <a href="#" class="btn close" role="button" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </a>
+      <h5 class="modal-title">Register for an account</h5>
+      <form action="{{ url_for('auth_blueprint.register') }}" method="post" >
+        <div class="form-group">
+          <label for="signup_username" class="required">Username</label>
+          <input type="text" name="signup_username" id="signup_username" class="form-control signup-form-item" placeholder=a_supercool_name>
+          <div id="label_username_available_false" class="username_feedback invalid-feedback">
+            ❌ Username already taken 😢
+          </div>
+          <div id="label_username_available_true" class="username_feedback feedback">
+            ✅ It's yours 😀
+          </div>
+          <div id="label_username_available_checking" class="username_feedback feedback">
+            <i class="fas fa-spinner fa-spin"></i> Checking...
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="signup_email">Email address (optional, but recommended)</label>
+          <input type="email" name="signup_email" id="signup_email" class="form-control signup-form-item" placeholder="you@you.com">
+        </div>
+        <div class="form-group">
+          <label for="signup_password1" class="required">Password</label>
+          <input type="password" name="signup_password1" id="signup_password1" class="form-control password_input signup-form-item" placeholder="Password" required="required">
+          <div id="label_password_too_short" class="invalid-feedback">
+            Password too short. You can do better than that.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="signup_password2" class="required">Confirm password</label>
+          <input type="password" id="signup_password2" class="form-control password_input signup-form-item" placeholder="Password" required="required">
+          <div id="label_passwords_do_not_match" class="invalid-feedback">
+            Does not match with the password above.
+          </div>
+        </div>
+        <input id="signup_submit" class="btn btn-primary btn-block" type="submit" value="Sign up">
+      </form>
+    </div>
+  </div>
+</div>
