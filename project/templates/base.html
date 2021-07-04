@@ -30,6 +30,34 @@
     {% block modals %}
     {% endblock %}
 
+    <div class="modal" id="modal-claim-ownership" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <a href="#" class="close" role="button" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+          <h5 class="modal-title">Claim ownership</h5>
+
+          {% if current_user.is_authenticated %}
+          <p>
+            Do you want to claim ownership of this comment set?
+          </p>
+          <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+            <a href="#" class="btn mr-5" role="button">Close</a>
+            <a href="/{{snapshot.unique_reference}}/claim_ownership" class="btn btn-primary" role="button">Yes, claim ownership</a>
+          </div>
+          {% else %}
+          <p>
+            You must be logged in to claim ownership of a comment set.
+          </p>
+          <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+            <a href="#" class="btn mr-5" role="button">Close</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
     {% include 'register.html' %}
 
     <!-- Page wrapper start -->
@@ -85,6 +113,7 @@
 
     <script src="/static/js/ui.js"></script>
     <script src="/static/js/validate.js"></script>
+
 
   </body>
 </html>

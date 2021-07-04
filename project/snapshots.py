@@ -18,6 +18,21 @@ def redirect_url(default='index'):
            url_for(default)
 
 
+@snapshots.get('/<snapshot_unique_reference>/claim_ownership')
+def claim_ownership(snapshot_unique_reference):
+
+    snapshot = Snapshot.query.filter_by(unique_reference=snapshot_unique_reference).first()
+
+    if snapshot.owner_id != None:
+        flash("This comment set cannot be claimed as it is already owned 🤷🏻‍", "danger")
+
+    snapshot.owner_id = current_user.id
+    db.session.commit()
+
+    flash ("Congratulations, this comment set is now yours 🙌", "success")
+    return redirect(url_for('main_blueprint.show_snapshot', snapshot_unique_reference = snapshot_unique_reference))
+
+
 @snapshots.post('/<snapshot_unique_reference>/give_name')
 def give_nickname(snapshot_unique_reference):
 

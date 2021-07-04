@@ -102,8 +102,8 @@ def logout():
     return redirect(redirect_url())
 
 
-@login_required
 @auth.get('/profile')
+@login_required
 def profile():
 
     user_snapshots = Snapshot.query.filter_by(owner_id = current_user.id).all()
@@ -113,8 +113,9 @@ def profile():
                            gist=None,
                            user_snapshots = user_snapshots)
 
-@login_required
+
 @auth.post('/profile/change_email')
+@login_required
 def change_email():
 
     current_user.email = request.form['email']
@@ -124,8 +125,8 @@ def change_email():
     return redirect(redirect_url())
 
 
-@login_required
 @auth.post('/profile/change_password')
+@login_required
 def change_password():
 
     current_password = request.form['current_password']

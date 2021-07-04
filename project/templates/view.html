@@ -39,6 +39,10 @@
 {% block modals %}
 
 <div id="gist_id" style="display: none;">{{gist.id}}</div>
+<div id="snapshot_owner_id" style="display: none;">{{snapshot.owner_id}}</div>
+<div id="snapshot_restricted" style="display: none;">{{snapshot.restricted}}</div>
+<div id="current_user_id" style="display: none;">{{current_user.id}}</div>
+
 
 <div class="modal" id="modal-delete-gist" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -70,7 +74,7 @@
       </p>
       <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
         <a href="#" class="btn mr-5" role="button">Close</a>
-        <a id="delete_comment_confirm"  href="" class="btn btn-danger" role="button">Yes, delete</a>
+        <a id="delete_comment_confirm"  href="#" class="btn btn-danger" role="button">Yes, delete</a>
       </div>
     </div>
   </div>
@@ -135,10 +139,15 @@
                                 {{ snapshot.display_name }} <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
                               </button>
                               <div class="dropdown-menu" aria-labelledby="...">
-                              {% if snapshot.nickname %}
-                              <a href="#modal-give-snapshot-nickname" class="dropdown-item"><i class="far fa-edit"></i> Change name</a>
-                              {% else %}
-                              <a href="#modal-give-snapshot-nickname" class="dropdown-item"><i class="far fa-edit"></i> Give name</a>
+                              {% if snapshot.owner_id == None %}
+                                <a href="#modal-claim-ownership" class="dropdown-item"><i class="fas fa-cart-plus"></i> Claim ownership</a>
+                              {% endif %}
+                              {% if snapshot.restricted == false or snapshot.owner_id == current_user.id %}
+                                  {% if snapshot.nickname %}
+                                  <a href="#modal-give-snapshot-nickname" class="dropdown-item"><i class="far fa-edit"></i> Change name</a>
+                                  {% else %}
+                                  <a href="#modal-give-snapshot-nickname" class="dropdown-item"><i class="far fa-edit"></i> Give name</a>
+                                  {% endif %}
                               {% endif %}
                               </div>
                           </div> /
@@ -147,8 +156,10 @@
                                 {{gist.filename}} <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
                               </button>
                               <div class="dropdown-menu" aria-labelledby="...">
-                                <a href="#modal-rename" class="dropdown-item"><i class="far fa-edit"></i> Rename</a>
-                                <a href="#modal-delete-gist" class="dropdown-item"><i class="far fa-trash-alt"></i> Delete</a>
+                                {% if snapshot.restricted == false or snapshot.owner_id == current_user.id %}
+                                    <a href="#modal-rename" class="dropdown-item"><i class="far fa-edit"></i> Rename</a>
+                                    <a href="#modal-delete-gist" class="dropdown-item"><i class="far fa-trash-alt"></i> Delete</a>
+                                {% endif %}
                                 {% if gist.url %}
                                     <a href="{{ gist.url }}" target="_blank" class="dropdown-item"><i class="fab fa-sourcetree"> View source</i></a>
                                 {% endif %}
@@ -156,17 +167,7 @@
                           </div>
                   </div>
                   <div class="position-absolute right-0">
-                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with sets of button groups">
-                      <div class="btn-group" role="group" aria-label="First group">
-                        <a href="#modal-rename" class="btn btn-square" type="button" data-toggle="tooltip" data-title="Rename" data-placement="bottom"><i class="far fa-edit"></i></a>
-                        <a href="#modal-delete-gist" class="btn btn-square" type="button" data-toggle="tooltip" data-title="Delete" data-placement="bottom"><i class="far fa-trash-alt"></i></a>
 
-                        {% if gist.url %}
-                          <a href="{{ gist.url }}" target="_blank" class="btn btn-square" type="button" data-toggle="tooltip" data-title="View source" data-placement="bottom"><i class="fab fa-sourcetree"></i></a>
-                        {% endif %}
-
-                      </div>
-                    </div>
                   </div>
                 </div>
 
@@ -212,7 +213,7 @@
                             <div class="middle ml-10">
                               <button id="create_comment" class="btn btn-primary btn-block mb-5 center" type="button"><i class="fas fa-plus-square"></i> Create</button>
                               <button id="save_comment" class="btn btn-primary btn-block mb-5 center" type="button"><i class="fas fa-save"></i> Save</button>
-                              <button id="discard_comment_changes" class="btn btn-block mb-5" type="button"><i class="fas fa-times-circle"></i> Discard</button>
+                              <button id="discard_comment_changes" class="btn btn-block mb-5" type="button"><i class="fas fa-times-circle"></i> Close</button>
                               <a id="delete_comment" href="#modal-delete-comment"  class="btn btn-danger btn-block mb-5" type="button"><i class="fas fa-trash"></i> Delete</a>
                             </div>
                         </div>

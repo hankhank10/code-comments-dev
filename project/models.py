@@ -28,7 +28,6 @@ class Snapshot(db.Model):
 
     unique_reference = db.Column(db.String(100))
     nickname = db.Column(db.String(100))
-    secret_key = db.Column(db.String(25))
 
     #github specific stuff
     repo_author = db.Column(db.String(50))
@@ -36,6 +35,13 @@ class Snapshot(db.Model):
     url = db.Column(db.String(300))
 
     owner_id = db.Column(db.ForeignKey('user.id'))
+
+    @property
+    def restricted(self):
+        if self.owner_id == None:
+            return False
+        else:
+            return True
 
     date_snapped = db.Column(db.DateTime)
     date_last_comment = db.Column(db.DateTime)
@@ -86,6 +92,14 @@ class Gist(db.Model):
     lines = db.relationship('Line', backref='gist', lazy=True)
     comments = db.relationship('Comment', backref='gist', lazy=True)
 
+    @property
+    def owner_id(self):
+        return self.snapshot.owner_id
+
+    @property
+    def restricted(self):
+        return self.snapshot.restricted
+
     def __repr__(self):
         return self.id
 
@@ -97,6 +111,14 @@ class Line(db.Model):
     line_number = db.Column(db.Integer)
 
     comments = db.relationship('Comment', backref='line', lazy=True)
+
+    @property
+    def owner_id(self):
+        return self.gist.owner_id
+
+    @property
+    def restricted(self):
+        return self.gist.restricted
 
     def __repr__(self):
         return self.id
@@ -110,10 +132,11 @@ class Comment(db.Model):
 
     @property
     def owner_id(self):
-        gist = Gist.query.filter_by(id = self.gist_id).first()
-        snapshot = Snapshot.query.filter_by(id = gist.snapshot_id).first()
-        owner_id = snapshot.owner_id
-        return owner_id
+        return self.line.owner_id
+
+    @property
+    def restricted(self):
+        return self.line.restricted
 
     def __repr__(self):
         return self.id

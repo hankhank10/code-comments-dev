@@ -59,16 +59,37 @@ def api_comment():
                 comment_content = comment_content
             )
 
+    request_data = request.json
+
+    # Check restrictions
+    authenticated = False
+    if request.method == 'POST':
+        line = Line.query.filter_by(id = request_data['line_id']).first()
+        if line.restricted:
+            if line.owner_id != current_user.id:
+                return jsonify(
+                    status="error",
+                    error="you are not the owner"
+            )
+
+    if request.method == 'PUT' or request.method == "DELETE":
+        comment = Comment.query.filter_by(id = request_data['comment_id']).first()
+        if comment.restricted:
+            if comment.owner_id != current_user.id:
+                return jsonify(
+                    status="error",
+                    error="you are not the owner"
+                )
+
+
     # POST
     if request.method == "POST":
-
-        request_data = request.json
 
         line_id = request_data['line_id']
         comment_content = request_data['comment_content']
 
-        if line_id is None: return jsonify(status ="failed", reason ="no line_id provided"), 404
-        if comment_content is None: return jsonify(status ="failed", reason ="no comment_content provided"), 404
+        if line_id is None: return jsonify(status ="error", reason ="no line_id provided"), 404
+        if comment_content is None: return jsonify(status ="error", reason ="no comment_content provided"), 404
 
         new_comment_id = create(line_id, comment_content)
         return jsonify(
@@ -78,13 +99,11 @@ def api_comment():
 
     # PUT to edit
     if request.method == "PUT":
-        request_data = request.json
-
         comment_id = request_data['comment_id']
         comment_content = request_data['comment_content']
 
-        if comment_id is None: return jsonify(status ="failed", reason ="no comment_id provided"), 404
-        if comment_content is None: return jsonify(status ="failed", reason ="no comment_content provided"), 404
+        if comment_id is None: return jsonify(status ="error", reason ="no comment_id provided"), 404
+        if comment_content is None: return jsonify(status ="error", reason ="no comment_content provided"), 404
 
         edit(comment_id, comment_content)
         return jsonify(
@@ -94,11 +113,9 @@ def api_comment():
 
     # DELETE
     if request.method == "DELETE":
-        request_data = request.json
-
         comment_id = request_data['comment_id']
 
-        if comment_id is None: return jsonify(status ="failed", reason ="no comment_id provided"), 404
+        if comment_id is None: return jsonify(status ="error", reason ="no comment_id provided"), 404
 
         delete(comment_id)
 

@@ -6,26 +6,52 @@ let simplemde;
 let current_comment_line_id;
 let current_comment_id;
 
+let edit_mode;
+
 function initial_setup() {
     factory_reset_icons()
-    simplemde = new SimpleMDE({
-        element: $("#comment_input")[0],
-        toolbar: [
-            'code',
-            '|',
-            'heading',
-            'bold',
-            'italic',
-            'strikethrough',
-            '|',
-            'link',
-            'image',
-            '|',
-            'preview',
-            'guide',
-        ],
-        status: false
-    });
+
+    let snapshot_owner_id = $('#snapshot_owner_id').text()
+    let snapshot_restricted = $('#snapshot_restricted').text()
+    let current_user_id = $('#current_user_id').text()
+
+    if (snapshot_restricted == "False") {
+        edit_mode = true;
+    } else {
+        if (snapshot_owner_id == current_user_id) {
+            edit_mode = true;
+        } else {
+            edit_mode = false;
+        }
+    }
+
+    if (edit_mode == true) {
+        //window.alert("hi")
+        simplemde = new SimpleMDE({
+            element: $("#comment_input")[0],
+            toolbar: [
+                'code',
+                '|',
+                'heading',
+                'bold',
+                'italic',
+                'strikethrough',
+                '|',
+                'link',
+                'image',
+                '|',
+                'preview',
+                'guide',
+            ],
+            status: false
+        });
+    } else {
+       simplemde = new SimpleMDE({
+            element: $("#comment_input")[0],
+            toolbar: false,
+            status: false
+       });
+    }
 
     $('#create_comment').hide()
     $('#save_comment').hide()
@@ -63,8 +89,17 @@ function check_comments() {
 }
 
 function factory_reset_icons() {
-    $('.new_comment_clicker').html(html_icon_plus)
-    $('.new_comment_clicker').addClass('faded').removeClass('invisible-temp').removeClass('invisible-permanent').removeClass('not-faded')
+
+
+    if (edit_mode == true) {
+        $('.new_comment_clicker').html(html_icon_plus)
+        $('.new_comment_clicker').addClass('faded').removeClass('invisible-temp').removeClass('invisible-permanent').removeClass('not-faded')
+    } else {
+        $('.new_comment_clicker').html(html_icon_plus)
+        $('.new_comment_clicker').addClass('invisible-permanent').removeClass('faded').removeClass('not-faded')
+        $('#save_comment').hide()
+        $('#delete_comment').hide()
+    }
 
     $('.comment_icon').addClass('invisible-permanent').removeClass('invisible-temp')
     $('.comment_icon').html(html_icon_comment)
@@ -100,8 +135,11 @@ function comment_bar_toggle() {
 function new_comment_show(line_id) {
     current_comment_line_id = line_id;
     comment_bar_expand();
-    $('#delete_comment').hide()
-    $('#create_comment').show()
+
+    if (edit_mode) {
+        $('#delete_comment').hide()
+        $('#create_comment').show()
+    }
 
 }
 
@@ -113,13 +151,16 @@ function edit_comment_show(comment_id) {
         type: 'GET',
         success: function (response) {
             simplemde.value(response.comment_content)
+            if (edit_mode) { simplemde.togglepreview() }
         },
         contentType: 'application/json; charset=utf-8'
     });
 
     comment_bar_expand();
-    $('#save_comment').show()
-    $('#delete_comment').show()
+    if (edit_mode) {
+        $('#save_comment').show()
+        $('#delete_comment').show()
+    }
 
 }
 
@@ -132,7 +173,12 @@ function save_comment(comment_id) {
                 "comment_content" : simplemde.value()
         }),
         success: function (response) {
-            toastPrimaryAlert("success", "Comment saved")
+            if (response.status == "success") {
+                toastPrimaryAlert("success", "Comment saved")
+            } else {
+                toastPrimaryAlert("danger", "Error")
+            }
+
             check_comments();
             comment_bar_shrink()
         },
@@ -149,7 +195,11 @@ function delete_comment(comment_id) {
                 "comment_id": comment_id
         }),
         success: function (response) {
-            toastPrimaryAlert("success", "Comment deleted")
+            if (response.status == "success") {
+                toastPrimaryAlert("success", "Comment deleted")
+            } else {
+                toastPrimaryAlert("danger", "Error")
+            }
             check_comments();
             comment_bar_shrink()
         },
@@ -166,7 +216,11 @@ function create_comment(line_id) {
                 "comment_content" : simplemde.value()
         }),
         success: function (response) {
-            toastPrimaryAlert("success", "Comment added")
+            if (response.status == "success") {
+                toastPrimaryAlert("success", "Comment added")
+            } else {
+                toastPrimaryAlert("danger", response.error)
+            }
             check_comments();
             comment_bar_shrink()
         },

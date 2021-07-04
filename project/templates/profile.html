@@ -71,9 +71,9 @@
 
         <div class="card">
           <h2 class="card-title">
-            <i class="lni lni-pencil-alt"></i> Your comment sets
+            <i class="lni lni-home"></i> Your comment sets
           </h2>
-          <table class="table" id="comment_table">
+          <table class="table table-hover" id="comment_table">
             <thead>
               <tr>
                 <th>Date created</th>
@@ -84,7 +84,7 @@
             </thead>
             <tbody>
               {% for row in user_snapshots|reverse %}
-              <tr>
+              <tr onclick='window.location="/{{ row.unique_reference }}"'>
                 <td><span data-livestamp="{{ row.date_snapped_timestamp }}"></span></td>
                 {% if row.nickname %}
                 <td>{{ row.nickname }}</td>
@@ -97,6 +97,7 @@
             {% endfor %}
             <tr>
               <td><a href="{{ url_for('main_blueprint.new') }}"><i class="lnil lnil-label-new"></i> Create new</a></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -146,6 +147,8 @@
 <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
 <script>
+
+  //halfmoon.pageWrapper.setAttribute("data-sidebar-hidden", "hidden");
 
   $('#matching_password_label').hide()
   $('#change_password_submit').prop('disabled', true)
