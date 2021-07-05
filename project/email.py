@@ -23,7 +23,7 @@ def send_message(to_address, subject, body):
         subject=subject,
         html_body=body
     )
-    envelope.send(secretstuff.mail_smtp_server, login=secretstuff.mail_username, password=secretstuff.mail_password, tls=True)
+    envelope.send(secretstuff2.mail_smtp_server, login=secretstuff2.mail_username, password=secretstuff2.mail_password, tls=True)
 
 
 def compose_and_send_message(to_address, subject, messages, call_to_action_text = None, call_to_action_url = None):
