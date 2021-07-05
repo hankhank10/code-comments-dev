@@ -168,8 +168,8 @@ def reset_password():
 
         messages = [
             'Well hello there 👋',
-            'You recently requested a password reset from <a href="https://codecomments.dev">CodeComments.dev</a> for the username ' + user.username,
-            "If that sounds right, then you can click below to reset your password - the code won't last forever so don't delay ⏳",
+            'You recently requested a password reset from <a href="https://codecomments.dev">CodeComments.dev</a> for the username ' + user.username +'.',
+            "If that sounds right, then you can click below to reset your password.",
             "If you didn't request a reset then don't worry, but do send me an email at scaryhackers@codecomments.dev to let me know.",
             "Have a 💯👌💪 day!"
         ]
