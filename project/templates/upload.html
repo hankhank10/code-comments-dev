@@ -13,10 +13,10 @@
       <a href="#" class="close" role="button" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </a>
-      <h5 class="modal-title">Upload from Pastebin or Hastebin</h5>
+      <h5 class="modal-title">Upload from URL</h5>
       <form action="/load/pastebin/{{ snapshot.unique_reference }}" method="post">
         <div class="form-group">
-          <label for="pastebin_url" class="required">Pastebin or Hastebin URL</label>
+          <label for="pastebin_url" class="required">Pastebin, Hastebin or Github Gist URL</label>
           <input type="text" name="pastebin_url" id="pastebin_url" class="form-control" placeholder="https://pastebin.com/" required="required">
         </div>
         <input class="btn btn-primary btn-block" type="submit" value="Load Script from URL">
@@ -56,7 +56,7 @@
         <a href="#modal-pastebin" class="btn btn-link px-0"><span style="font-size: 2rem"><i class="lni lni-copy"></i> Copy from URL (Pastebin / Hastebin / Github)</span></a>
       </div>
       <div  class="mt-10">
-        <a href="#" class="btn btn-link px-0"><span style="font-size: 2rem"><i class="lni lni-question-circle"></i> Help</span></a>
+        <a href="/help" class="btn btn-link px-0"><span style="font-size: 2rem"><i class="lni lni-question-circle"></i> Help</span></a>
       </div>
 
     </div>

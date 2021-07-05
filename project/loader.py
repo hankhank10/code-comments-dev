@@ -54,9 +54,10 @@ def load_from_pastebin(snapshot_unique_reference = None):
     content, pastebin_unique_reference = pastebin_api.get_from_bin(pastebin_url)
 
     if content == "error":
-        flash("danger", "URL not available")
-        return redirect(url_for('main_blueprint.show_snapshot',
-                                snapshot_unique_reference=snapshot_unique_reference))
+        flash("URL not available 🤦🏻‍️", "danger")
+        if snapshot_unique_reference:
+            return redirect(url_for('main_blueprint.show_snapshot', snapshot_unique_reference=snapshot_unique_reference))
+        return redirect(url_for('main_blueprint.new'))
 
     snapshot_unique_reference, filename = gists.create_gist(
         filename=pastebin_unique_reference,

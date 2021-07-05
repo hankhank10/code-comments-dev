@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, render_template, current_app, redirect, json
 from flask_login import login_required, current_user
 from . import db
 from . import app
-from project import email
+from project import email, gists, snapshots, pastebin_api
 
 main = Blueprint('main_blueprint', __name__)
 
@@ -10,6 +10,9 @@ from .models import Snapshot, Gist, Line
 
 
 @main.route('/')
+def index():
+    return render_template('index.html', snapshot=None, gist=None)
+
 @main.route('/new-script')
 def new():
 
@@ -38,16 +41,25 @@ def show_snapshot(snapshot_unique_reference, filename = None):
     return render_template('view.html', snapshot = snapshot, gist = gist, lines = lines)
 
 
-@main.route('/test_email')
-def test_email():
-    messages = ['Hi there!', 'How are you??']
+@main.route('/help')
+def tutorial():
 
-    email.compose_and_send_message(
-        to_address="m.a.hankinson@gmail.com",
-        subject="Subject",
-        messages=messages,
-        call_to_action_text="Go!",
-        call_to_action_url="https://google.com/"
-    )
+    tutorial_snapshot_unique_reference = snapshots.create(True)
 
-    return "done"
+    list_of_urls = [
+        'https://github.com/hankhank10/code-comments-tutorial/blob/main/what-is-this.js',
+        'https://github.com/hankhank10/code-comments-tutorial/blob/main/tutorial.md',
+        'https://github.com/hankhank10/code-comments-tutorial/blob/main/supported_languages.py',
+        'https://github.com/hankhank10/code-comments-tutorial/blob/main/tools_used.py',
+        'https://github.com/hankhank10/code-comments-tutorial/blob/main/get_help.html'
+    ]
+
+    for url in list_of_urls:
+        content, pastebin_unique_reference = pastebin_api.get_from_bin(url)
+        gists.create_gist(
+            filename=pastebin_unique_reference,
+            content=content,
+            snapshot_unique_reference=tutorial_snapshot_unique_reference)
+
+    return redirect(url_for('main_blueprint.show_snapshot',
+                            snapshot_unique_reference = tutorial_snapshot_unique_reference))

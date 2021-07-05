@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<!-- Uppy -->
+<link href="https://releases.transloadit.com/uppy/v1.29.1/uppy.min.css" rel="stylesheet">
+{% endblock%}
+
+{% block modals %}
+<!-- Modals go here -->
+{% endblock%}
+
+{% block content %}
+<!-- Content wrapper start -->
+<div class="content-wrapper">
+  <!--
+    Add your page's main content here
+    Examples:
+    1. https://www.gethalfmoon.com/docs/content-and-cards/#building-a-page
+    2. https://www.gethalfmoon.com/docs/grid-system/#building-a-dashboard
+  -->
+  <div class="w-full h-full d-flex align-items-center justify-content-center">
+    <div class="content">
+      <h1 class="content-title">Welcome to CodeComments.dev 👋</h1>
+      <div class="mt-10">
+        <p class="font-size-18">CodeComments.dev is a simple, free and no-nonsense way of providing comments on code.</p>
+        <p class="font-size-18"><i class="fas fa-check-circle text-success"></i> &nbsp&nbsp Supports every major language</p>
+        <p class="font-size-18"><i class="fas fa-check-circle text-success"></i> &nbsp&nbsp Free and <a href="https://github.com/hankhank10/code-comments-dev" target="_blank">open source</a></p>
+        <p class="font-size-18"><i class="fas fa-check-circle text-success"></i> &nbsp&nbsp Upload scripts from <span data-toggle="tooltip" data-title="Well, not anywhere: Github, Pastebin or hastebin" data-placement="right">anywhere</span></p>
+        <p class="font-size-18"><i class="fas fa-check-circle text-success"></i> &nbsp&nbsp Share your comments with just a URL</p>
+        <p class="font-size-18"><i class="fas fa-check-circle text-success"></i> &nbsp&nbsp Runs entirely in browser and in the cloud</p>
+        <p class="font-size-18"><i class="fas fa-check-circle text-success"></i> &nbsp&nbsp No registration required</p>
+        <p class="font-size-18"><i class="fas fa-check-circle text-success"></i> &nbsp&nbsp <a href="#" onclick="toggle_dark()">Dark mode</a></p>
+        <div class="mt-10">
+          <p class="font-size-18">Get started: <a href="/new">upload a script</a> or <a href="/help">take the tutorial</a>.</p>
+        </div>
+
+
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+<!-- Content wrapper end -->
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

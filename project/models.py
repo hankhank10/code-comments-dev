@@ -40,6 +40,8 @@ class Snapshot(db.Model):
 
     owner_id = db.Column(db.ForeignKey('user.id'))
 
+    tutorial = db.Column(db.Boolean)
+
     @property
     def restricted(self):
         if self.owner_id == None:

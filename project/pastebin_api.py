@@ -35,7 +35,7 @@ def get_from_bin(url):
             url = url.replace("/blob", "")
 
     # Step 3: Download content
-    r = requests.get(url)
+    r = requests.get(url, headers={'Cache-Control': 'no-cache'})
     if r.status_code != 200:
         return "error", "error"
 

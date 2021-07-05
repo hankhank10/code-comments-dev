@@ -56,8 +56,12 @@ def get_id(snapshot_unique_reference):
     return snapshot.id
 
 
-def create():
-    unique_reference = coolname.generate_slug(3)
+def create(tutorial = False):
+
+    if tutorial:
+        unique_reference = "help-" + coolname.generate_slug(2)
+    else:
+        unique_reference = coolname.generate_slug(3)
 
     owner_id = None
     if current_user.is_authenticated:
@@ -66,7 +70,8 @@ def create():
     new_snapshot = Snapshot(
         unique_reference = unique_reference,
         date_snapped = datetime.now(),
-        owner_id = owner_id
+        owner_id = owner_id,
+        tutorial = tutorial
     )
     db.session.add(new_snapshot)
     db.session.commit()
