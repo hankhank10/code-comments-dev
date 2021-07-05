@@ -1,5 +1,5 @@
 from flask.templating import render_template
-from project import secretstuff
+from project import secretstuff2
 from . import db
 
 from envelopes import Envelope
