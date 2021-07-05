@@ -2,6 +2,7 @@ from flask import Flask, Blueprint, render_template, current_app, redirect, json
 from flask_login import login_required, current_user
 from . import db
 from . import app
+from project import email
 
 main = Blueprint('main_blueprint', __name__)
 
@@ -37,3 +38,16 @@ def show_snapshot(snapshot_unique_reference, filename = None):
     return render_template('view.html', snapshot = snapshot, gist = gist, lines = lines)
 
 
+@main.route('/test_email')
+def test_email():
+    messages = ['Hi there!', 'How are you??']
+
+    email.compose_and_send_message(
+        to_address="m.a.hankinson@gmail.com",
+        subject="Subject",
+        messages=messages,
+        call_to_action_text="Go!",
+        call_to_action_url="https://google.com/"
+    )
+
+    return "done"

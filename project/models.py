@@ -16,6 +16,10 @@ class User(UserMixin, db.Model):
     verified = db.Column(db.Boolean)
     unique_setup_key = db.Column(db.String(30))
 
+    # password reset
+    password_reset_key = db.Column(db.String(30))
+    password_reset_expiry = db.Column(db.DateTime)
+
     snapshots = db.relationship('Snapshot', backref='owner', lazy=True)
     #comments = db.relationship('Comment', backref='author', lazy=True)
 
