@@ -28,6 +28,12 @@
       heap.load("3487248977");
     </script>
 
+    {% if current_user.is_authenticated %}
+    <script>
+      heap.identify('{{ current_user.username }}');
+    </script>
+    {% endif %}
+
   </head>
   <body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-dm-shortcut-enabled="true" data-sidebar-shortcut-enabled="true" data-set-preferred-theme-onload="true">
 
