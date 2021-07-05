@@ -6,7 +6,7 @@ from . import app
 gists = Blueprint('gists_blueprint', __name__)
 
 from . import snapshots
-from .models import Snapshot, Gist, Line
+from .models import Snapshot, Gist, Line, Comment
 
 
 def fix_name(snapshot_unique_reference, filename):
@@ -93,7 +93,11 @@ def delete(snapshot_unique_reference, filename):
         filename = filename
     ).first_or_404()
 
+    Comment.query.filter_by(gist_id = gist.id).delete()
+    db.session.commit()
+
     Line.query.filter_by(gist_id = gist.id).delete()
+    db.session.commit()
 
     db.session.delete(gist)
     db.session.commit()
