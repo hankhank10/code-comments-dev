@@ -46,19 +46,40 @@
     1. https://www.gethalfmoon.com/docs/content-and-cards/#building-a-page
     2. https://www.gethalfmoon.com/docs/grid-system/#building-a-dashboard
   -->
-  <div class="w-full h-full d-flex align-items-center justify-content-center">
-    <div class="content">
-      <h1 class="content-title">Start a new script</h1>
-      <div class="mt-10">
-        <a href="#" onclick="halfmoon.toggleModal('modal-upload-file')" class="btn btn-link px-0"><span style="font-size: 2rem"><i class="lni lni-file-upload"></i> Upload file</span></a>
+  <div class="w-full h-full">
+    <div class="content h-full">
+      <div class="container-fluid h-full">
+        <div class="row w-full">
+          <div class="col-7 h-full">
+            <div class="content h-full">
+              <h1 class="content-title">Paste your code here...</h1>
+              <form action="/load/manual/{{ snapshot.unique_reference }}" method="post">
+                <div class="form-group form-inline">
+                  <label for="pasted-script-name">Optional name:</label>
+                  <input type="text" class="form-control" placeholder="Script name" id="pasted-script-name" name="pasted-script-name">
+                  <input type="submit" class="btn btn-primary" value="Upload">
+                </div>
+                <div class="form-group h-600 w-full" style="height: 100%;">
+                  <textarea name="pasted-script-content" class="form-control mh-full" id="description" placeholder="Paste your code here." style="height: 100%; font-family: 'Courier New', monospace; white-space: nowrap;  overflow: auto" required></textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-5">
+            <div class="content">
+              <div class="card">
+                <h2 class="card-title">... or upload from here</h2>
+                <a href="#" onclick="halfmoon.toggleModal('modal-upload-file')" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-file-upload"></i> Upload file</span></a>
+              <div class="mt-10">
+                <a href="#modal-pastebin" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-copy"></i> Fetch from URL</span></a>
+              </div>
+              <div  class="mt-10">
+                <a href="/help" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-question-circle"></i> Help</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="mt-10">
-        <a href="#modal-pastebin" class="btn btn-link px-0"><span style="font-size: 2rem"><i class="lni lni-copy"></i> Copy from URL (Pastebin / Hastebin / Github)</span></a>
-      </div>
-      <div  class="mt-10">
-        <a href="/help" class="btn btn-link px-0"><span style="font-size: 2rem"><i class="lni lni-question-circle"></i> Help</span></a>
-      </div>
-
     </div>
   </div>
 </div>

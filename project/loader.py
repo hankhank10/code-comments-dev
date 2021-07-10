@@ -15,6 +15,7 @@ loader = Blueprint('loader_blueprint', __name__)
 from .models import Snapshot, Gist, Line
 
 
+
 @loader.route('/load/file/', methods=['POST'])
 @loader.route('/load/file/<snapshot_unique_reference>', methods=['POST'])
 def file_upload(snapshot_unique_reference = None):
@@ -44,6 +45,25 @@ def file_upload(snapshot_unique_reference = None):
         snapshot_unique_reference = snapshot_unique_reference,
         gist_filename = filename
     ), 201
+
+
+@loader.route('/load/manual/', methods=['POST'])
+@loader.route('/load/manual/<snapshot_unique_reference>', methods=['POST'])
+def load_from_manual(snapshot_unique_reference = None):
+
+    pasted_script_name = request.form.get('pasted-script-name')
+    pasted_script_content = request.form.get('pasted-script-content')
+
+    snapshot_unique_reference, filename = gists.create_gist(
+        filename=pasted_script_name,
+        content=pasted_script_content,
+        snapshot_unique_reference=snapshot_unique_reference)
+
+    flash("Script uploaded", "success")
+
+    return redirect(url_for('main_blueprint.show_snapshot',
+                    snapshot_unique_reference=snapshot_unique_reference,
+                    filename=filename))
 
 
 @loader.route('/load/pastebin/', methods=['POST'])

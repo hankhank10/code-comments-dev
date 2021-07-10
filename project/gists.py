@@ -2,11 +2,32 @@ from flask import Flask, Blueprint, render_template, current_app, redirect, json
 from flask_login import login_required, current_user
 from . import db
 from . import app
+import secrets
 
 gists = Blueprint('gists_blueprint', __name__)
 
-from . import snapshots
+from . import snapshots, loader
 from .models import Snapshot, Gist, Line, Comment
+
+
+def valid_script_name(filename):
+    if filename == None: return False
+    if len(filename) == 0: return False
+    if len(filename) > 50: return False
+    if " " in filename: return False
+    if "?" in filename: return False
+    if "&" in filename: return False
+
+    return True
+
+
+def work_out_file_type(filename):
+    file_type = "code"
+    if ".py" in filename: file_type = "python"
+    if ".html" in filename: file_type = "html5"
+    if ".css" in filename: file_type = "css3"
+    if ".js" in filename: file_type = "javascript"
+    return file_type
 
 
 def fix_name(snapshot_unique_reference, filename):
@@ -47,12 +68,8 @@ def create_gist(filename, content, snapshot_unique_reference = None, url = None)
     # Check if gist with that filename already exists
     filename = fix_name(snapshot_unique_reference, filename)
 
-    # See if we can work out the file types
-    file_type = "code"
-    if ".py" in filename: file_type = "python"
-    if ".html" in filename: file_type = "html5"
-    if ".css" in filename: file_type = "css3"
-    if ".js" in filename: file_type = "javascript"
+    if not valid_script_name(filename):
+        filename = secrets.token_hex(5)
 
     # Create gist
     new_gist = Gist(
@@ -60,7 +77,7 @@ def create_gist(filename, content, snapshot_unique_reference = None, url = None)
         filename = filename,
         downloaded = True,
         url = url,
-        file_type = file_type
+        file_type = work_out_file_type(filename)
     )
     db.session.add(new_gist)
     db.session.commit()
@@ -112,15 +129,23 @@ def rename(snapshot_unique_reference, filename):
 
     new_filename = request.form['new_filename']
 
+    # Check to see if filename is valid
+    if not valid_script_name(new_filename):
+        flash ("That filename is not valid", "danger")
+        return redirect(url_for('main_blueprint.show_snapshot',
+                                snapshot_unique_reference=snapshot_unique_reference,
+                                filename=filename))
+
     # Check if gist with that filename already exists
     new_filename = fix_name(snapshot_unique_reference, new_filename)
 
     gist = Gist.query.filter_by(
         snapshot_id=snapshots.get_id(snapshot_unique_reference),
-        filename=filename
+        filename=filename,
     ).first()
 
     gist.filename = new_filename
+    gist.file_type = work_out_file_type(new_filename)
     db.session.commit()
 
     flash("Script renamed " + new_filename, "success")
