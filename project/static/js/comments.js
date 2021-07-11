@@ -108,6 +108,7 @@ function factory_reset_icons() {
 function comment_bar_expand() {
     $('#comment_bar').addClass('h-250').removeClass('h-50')
     $('#container_comment_input').show()
+    $('#discard_comment_changes').show()
     comment_bar_expanded = true;
 }
 
@@ -284,3 +285,24 @@ $('.comment_icon').click(function() {
     edit_comment_show($(this).attr("data-id"))
 })
 
+$('.comment_icon').hover(
+    function() {
+
+        if ($('#discard_comment_changes').is(":visible") == false) {
+            if ($(this).attr("data-id") != "") {
+                edit_comment_show($(this).attr("data-id"))
+                $('#save_comment').hide()
+                $('#delete_comment').hide()
+                $('#discard_comment_changes').hide()
+            }
+        }
+
+    },
+    function() {
+        console.log($('#discard_comment_changes').is(":visible"))
+
+        if ($('#discard_comment_changes').is(":visible") == false) {
+            comment_bar_shrink()
+        }
+    }
+)
