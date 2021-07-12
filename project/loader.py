@@ -73,7 +73,9 @@ def load_from_github_api(snapshot_unique_reference = None):
     repo_url = request.form.get('github_repo_url')
     gist_list = github_api.get_gist_list_from_repo(repo_url)
 
-    return jsonify(gist_list)
+    return render_template('github-viewer.html',
+                           gist_list = gist_list,
+                           repo_url = repo_url)
 
 
 @loader.route('/load/pastebin/', methods=['POST'])
