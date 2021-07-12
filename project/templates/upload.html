@@ -29,11 +29,24 @@
 
 <div class="modal" id="modal-github" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
+    {% if snapshot.unique_reference %}
+    <div class="modal-content">
+    {% else %}
     <div class="modal-content" style="width: 90%">
+    {% endif %}
       <a href="#" class="close" role="button" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </a>
       <h5 class="modal-title">Load a repo from <i class="lni lni-github-original"></i> Github</h5>
+
+      {% if snapshot.unique_reference %}
+      <p>Uploading a repo from GitHub will start a new workspace. If you just want to upload one file then upload <a href="#modal-pastebin">via URL</a> instead.</p>
+      <p>Do you want to start a new workspace?</p>
+      <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+        <a href="#" class="btn mr-5" role="button">Close</a>
+        <a href="/new-script#modal-github" class="btn btn-danger" role="button">Start a new workspace</a>
+      </div>
+      {% else %}
       <form action="/load/github/{{ snapshot.unique_reference }}" method="post">
         <div class="form-group">
           <select name="github_repo_name" style="width: 100%" class="js-example-data-ajax" id="github_repo_select" form-control"></select>
@@ -41,6 +54,7 @@
         </div>
         <input class="btn btn-primary btn-block" type="submit" value="Load">
       </form>
+      {% endif %}
     </div>
   </div>
 </div>
