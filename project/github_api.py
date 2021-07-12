@@ -2,9 +2,17 @@ import requests
 import base64
 
 
-def get_gist_list_from_repo(user, repo_name, tree):
-    api_url = "https://api.github.com/repos/" + user + "/" + repo_name +"/git/trees/" + tree + "?recursive=1"
-    r = requests.get(api_url)
+def get_gist_list_from_repo(url):
+
+    # Get default tree
+    r = requests.get(url)
+    trees_url = (r.json()['trees_url'])
+    default_branch = (r.json()['default_branch'])
+
+    # Build tree url
+    trees_url = trees_url.replace('{/sha}', "/" + default_branch + "?recursive=1")
+
+    r = requests.get(trees_url)
 
     output = []
     for item in r.json()['tree']:
@@ -30,6 +38,6 @@ def get_gist(url, list_format = True):
     return gist
 
 
-repo = get_gist_list_from_repo("hankhank10", "crew-resource-management", "main")
+#repo = get_gist_list_from_repo("hankhank10", "crew-resource-management", "main")
 
-gist = get_gist(repo[3]['url'])
+#gist = get_gist(repo[3]['url'])

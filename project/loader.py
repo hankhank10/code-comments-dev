@@ -6,7 +6,7 @@ from . import app
 import secrets
 import os
 
-from . import gists
+from . import gists, github_api
 from . import pastebin_api
 
 
@@ -64,6 +64,16 @@ def load_from_manual(snapshot_unique_reference = None):
     return redirect(url_for('main_blueprint.show_snapshot',
                     snapshot_unique_reference=snapshot_unique_reference,
                     filename=filename))
+
+
+@loader.route('/load/github/', methods=['POST'])
+@loader.route('/load/github/<snapshot_unique_reference>', methods=['POST'])
+def load_from_github_api(snapshot_unique_reference = None):
+
+    repo_url = request.form.get('github_repo_url')
+    gist_list = github_api.get_gist_list_from_repo(repo_url)
+
+    return jsonify(gist_list)
 
 
 @loader.route('/load/pastebin/', methods=['POST'])

@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block stylesheets %}
-<!-- Uppy -->
 <link href="https://releases.transloadit.com/uppy/v1.29.1/uppy.min.css" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />]
+<link href="/static/css/customselect2.css" rel="stylesheet"/>
 {% endblock%}
 
 {% block modals %}
@@ -25,13 +27,29 @@
   </div>
 </div>
 
+<div class="modal" id="modal-github" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 90%">
+      <a href="#" class="close" role="button" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </a>
+      <h5 class="modal-title">Load a repo from <i class="lni lni-github-original"></i> Github</h5>
+      <form action="/load/github/{{ snapshot.unique_reference }}" method="post">
+        <div class="form-group">
+          <select name="github_repo_name" style="width: 100%" class="js-example-data-ajax" id="github_repo_select" form-control"></select>
+          <input name="github_repo_url" id="github_repo_url" type="hidden">
+        </div>
+        <input class="btn btn-primary btn-block" type="submit" value="Load">
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="modal-upload-file" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <h5 class="modal-title">Upload file</h5>
-
       <div id="drag-drop-area"></div>
-
     </div>
   </div>
 </div>
@@ -40,12 +58,6 @@
 {% block content %}
 <!-- Content wrapper start -->
 <div class="content-wrapper">
-  <!--
-    Add your page's main content here
-    Examples:
-    1. https://www.gethalfmoon.com/docs/content-and-cards/#building-a-page
-    2. https://www.gethalfmoon.com/docs/grid-system/#building-a-dashboard
-  -->
   <div class="w-full h-full">
     <div class="content h-full">
       <div class="container-fluid h-full">
@@ -69,12 +81,20 @@
             <div class="content">
               <div class="card">
                 <h2 class="card-title">... or upload from here</h2>
-                <a href="#" onclick="halfmoon.toggleModal('modal-upload-file')" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-file-upload"></i> Upload file</span></a>
-              <div class="mt-10">
-                <a href="#modal-pastebin" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-copy"></i> Fetch from URL</span></a>
-              </div>
-              <div  class="mt-10">
-                <a href="/help" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-question-circle"></i> Help</span></a>
+
+                <div class="mt-10">
+                  <a href="#modal-github" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-github"></i> Load Github repo</span></a>
+                </div>
+
+                <div class="mt-10">
+                  <a href="#" onclick="halfmoon.toggleModal('modal-upload-file')" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-cloud-upload"></i> Upload file</span></a>
+                </div>
+                <div class="mt-10">
+                  <a href="#modal-pastebin" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-link"></i> Fetch from URL</span></a>
+                </div>
+                <div  class="mt-10">
+                  <a href="/help" class="btn btn-link px-0"><span style="font-size: 1.8rem"><i class="lni lni-question-circle"></i> Help</span></a>
+                </div>
               </div>
             </div>
           </div>
@@ -82,18 +102,19 @@
       </div>
     </div>
   </div>
-</div>
 <!-- Content wrapper end -->
 {% endblock %}
 
 {% block javascripts %}
 <script src="https://releases.transloadit.com/uppy/v1.29.1/uppy.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script>
+
+<script type="text/javascript">
   const DragDrop = Uppy.DropTarget;
   const XHRUpload = Uppy.XHRUpload;
 
-  var snapshot_unique_reference = '{{ snapshot.unique_reference|join }}';
+  let snapshot_unique_reference = '{{ snapshot.unique_reference|join }}';
 
   if (snapshot_unique_reference) {
     post_url = '/load/file/'+snapshot_unique_reference
@@ -133,4 +154,7 @@
     window.location.href = "/" + response.body.snapshot_unique_reference + "/" + response.body.gist_filename;
   })
 </script>
+
+<script src="github_handler.js"></script>
+
 {% endblock %}
