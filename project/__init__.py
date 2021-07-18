@@ -7,6 +7,9 @@ from flask_admin import Admin
 from flask_admin.contrib import sqla
 from sqlalchemy.sql.expression import false, true
 
+from flask_debugtoolbar import DebugToolbarExtension
+
+
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 
@@ -20,6 +23,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+app.debug = True
+toolbar = DebugToolbarExtension(app)
 
 login_manager = LoginManager()
 login_manager.login_view = 'main_blueprint.new'

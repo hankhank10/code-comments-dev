@@ -14,7 +14,10 @@ loader = Blueprint('loader_blueprint', __name__)
 
 from .models import Snapshot, Gist, Line
 
-
+def redirect_url(default='index'):
+    return request.args.get('next') or \
+           request.referrer or \
+           url_for(default)
 
 @loader.route('/load/file/', methods=['POST'])
 @loader.route('/load/file/<snapshot_unique_reference>', methods=['POST'])
@@ -70,12 +73,23 @@ def load_from_manual(snapshot_unique_reference = None):
 @loader.route('/load/github/<snapshot_unique_reference>', methods=['POST'])
 def load_from_github_api(snapshot_unique_reference = None):
 
+    snapshot = Snapshot.query.filter_by(unique_reference = snapshot_unique_reference).first()
+
     repo_url = request.form.get('github_repo_url')
+
+    if "#error: " in repo_url:
+        flash ("Error accessing that github repo. " + repo_url, "danger")
+        return redirect(redirect_url())
+
     gist_list = github_api.get_gist_list_from_repo(repo_url)
 
+    if "#error: " in gist_list:
+        flash("Error accessing that github repo. " + gist_list, "danger")
+        return redirect(redirect_url())
+
     return render_template('github-viewer.html',
-                           gist_list = gist_list,
-                           repo_url = repo_url)
+                           snapshot = snapshot,
+                           gist_list = gist_list)
 
 
 @loader.route('/load/pastebin/', methods=['POST'])

@@ -5,7 +5,7 @@ function initalise_dropdown() {
     ajax: {
     url: "https://api.github.com/search/repositories",
     dataType: "json",
-    delay: 250,
+    delay: 300,
     data: function (params) {
       return {
         q: params.term, // search term
@@ -29,7 +29,7 @@ function initalise_dropdown() {
     cache: true,
     },
     placeholder: 'Start typing to search Github',
-    minimumInputLength: 2,
+    minimumInputLength: 4,
     templateResult: formatRepo,
     templateSelection: formatRepoSelection,
     theme: "classic",
