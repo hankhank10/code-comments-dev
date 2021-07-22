@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, render_template, current_app, redirect, json
 from flask_login import login_required, current_user
 from . import db
 from . import app
-from project import email, gists, snapshots, pastebin_api
+from project import mailman, gists, snapshots, pastebin_api
 
 main = Blueprint('main_blueprint', __name__)
 

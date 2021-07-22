@@ -83,6 +83,8 @@ def load_from_github_api(snapshot_unique_reference = None):
 
     gist_list = github_api.get_gist_list_from_repo(repo_url)
 
+    print (gist_list)
+
     if "#error: " in gist_list:
         flash("Error accessing that github repo. " + gist_list, "danger")
         return redirect(redirect_url())

@@ -1,6 +1,8 @@
 import requests
 import base64
 
+from project import secretstuff2
+
 
 def github_node(directory_name, node_url):
     r = requests.get(node_url)
@@ -26,8 +28,12 @@ def github_node(directory_name, node_url):
 
 def get_gist_list_from_repo(url):
 
+    # Authenticate
+    username = secretstuff2.github_username
+    token = secretstuff2.github_token
+
     # Get default tree
-    r = requests.get(url)
+    r = requests.get(url, auth=(username, token))
     if r.status_code != 200:
         return "#error: " + str(r.status_code)
 
@@ -35,7 +41,6 @@ def get_gist_list_from_repo(url):
     default_branch = (r.json()['default_branch'])
 
     # Build tree url
-    #trees_url = trees_url.replace('{/sha}', "/" + default_branch + "?recursive=1")
     trees_url = trees_url.replace('{/sha}', "/" + default_branch)
 
     output = github_node("home", trees_url)

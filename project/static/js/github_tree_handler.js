@@ -1,1 +1,1 @@
-$('#jstree_demo_div').jstree();
+$("#jstree_demo_div").jstree();

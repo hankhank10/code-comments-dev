@@ -1,23 +1,19 @@
-{% extends "base.html" %}
-
-{% block stylesheets %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-{% endblock%}
-
-{% block modals %}
+{% extends "base.html" %} {% block stylesheets %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"
+/>
+{% endblock%} {% block modals %}
 <!-- Modals go here -->
-{% endblock%}
-
-{% block content %}
+{% endblock%} {% block content %}
 <!-- Content wrapper start -->
 <div class="content-wrapper">
-    <div class="content">
+  <div class="content">
+    {% for item in gist_list %}
+    <p>{{item}}</p>
+    {% endfor %}
 
-        {% for item in gist_list %}
-        <p>{{item.path}}</p>
-        {% endfor %}
-
-        <!--
+    <!--
         <ul>
             {% for item in gist_list recursive %}
             <li>{{ item.path }}
@@ -28,15 +24,16 @@
             {% endfor %}
         </ul>
         -->
-
-
-    </div>
+  </div>
 </div>
 <!-- Content wrapper end -->
-{% endblock %}
-
-{% block javascripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/jstree.min.js" integrity="sha512-bU6dl4fd2XN3Do3aWypPP2DcKywDyR3YlyszV+rOw9OpglrGyBs6TyTsbglf9umgE+sy+dKm1UHhi07Lv+Vtfg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %} {% block javascripts %}
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/jstree.min.js"
+  integrity="sha512-bU6dl4fd2XN3Do3aWypPP2DcKywDyR3YlyszV+rOw9OpglrGyBs6TyTsbglf9umgE+sy+dKm1UHhi07Lv+Vtfg=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 <script src="/static/js/github_tree_handler.js"></script>
 
 {% endblock %}
