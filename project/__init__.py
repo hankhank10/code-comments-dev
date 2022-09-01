@@ -24,7 +24,7 @@ UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.debug = True
-toolbar = DebugToolbarExtension(app)
+#toolbar = DebugToolbarExtension(app)
 
 login_manager = LoginManager()
 login_manager.login_view = 'main_blueprint.new'
