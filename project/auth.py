@@ -175,7 +175,7 @@ def reset_password():
         ]
 
         try:
-            email.compose_and_send_message(
+            mailman.compose_and_send_message(
                 to_address=email_address,
                 subject="Password reset link",
                 messages=messages,
