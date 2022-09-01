@@ -6,3 +6,4 @@
 secretstuff.py
 secretstuff2.py
 .DS_Store
+/.venv/*
